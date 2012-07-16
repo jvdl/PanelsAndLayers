@@ -1,0 +1,81 @@
+
+/** Panels are our containers for layers */
+
+.panel {
+	height: 100%;
+	min-height:650px;
+	position: relative;
+}
+
+
+
+/*
+
+.layer - movable layers that will scroll at varying levels of inertia
+.level-n - 	a depth (z-index) level the item lives on. Where 1 is the foremost layer
+			and 10 is the furthest out
+
+*/
+
+.layer {
+	position: relative;
+	top:0;
+	left:0;
+}
+
+.layer-group {
+	position: relative;
+}
+
+.layer-group .layer { /* Layers are relative until they are in a group */
+	position: absolute;
+}
+
+.level-1 { z-index: 2000; }
+.level-2 { z-index: 1900; }
+.level-3 { z-index: 1800; }
+.level-4 { z-index: 1700; }
+.level-5 { z-index: 1600; }
+
+
+/***********************************************************************************************************/
+/***********************************************************************************************************/
+/***********************************************************************************************************/
+
+
+/* Demo styles */
+
+
+#content {
+	width:800px;
+	margin: 0 auto;
+}
+
+article.panel, footer.panel{
+	padding:50px 0;
+}
+
+#fruit-apple      { top:-100px; left:-100px; }
+#fruit-cheese     { top:200px;  left:500px;  }
+#fruit-eggs       { top:100px;  left:500px;  }
+#fruit-meat       { top:300px;  left:300px;  }
+#fruit-milk       { top:500px;  left:200px;  }
+#fruit-orange     { top:600px;  left:400px;  }
+#fruit-pear       { top:500px;  left:100px;  }
+#fruit-strawberry { top:100px;  left:400px;  }
+
+
+#scene-sun    { top:500px; left:10px; }
+#scene-surf   { top:500px; left:10px; }
+#scene-bike   { top:580px; left:600px; }
+#scene-bird   { top:600px; left:10px; }
+#scene-tree-1 { top:350px; left:500px; }
+#scene-tree-2 { top:400px; left:100px; }
+#scene-tree-3 { top:300px; left:500px; }
+#scene-tree-4 { top:100px; left:10px; }
+
+afooter#footer-links a {
+	font-size: 30px;
+	text-align: center;
+	text-decoration: none;
+}
