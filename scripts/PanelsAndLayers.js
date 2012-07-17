@@ -279,3 +279,21 @@ function PanelsAndLayers() {
 
 
 }
+/*global define:true requirejs:true*/
+
+if (typeof requirejs === "function") {
+	//make sure older plugins wait for jQuery
+	requirejs.config({
+		shim: {
+			"jquery.easing.1.3": ["jquery.min"],
+			"jquery.ba-throttle-debounce": ["jquery.min"],
+			"jquery.fracs-0.11.min": ["jquery.min"],
+			"jquery.nicescroll.min": ["jquery.min"]
+		}
+	});
+}
+if (typeof define === "function") {
+	define("PanelsAndLayers", ["jquery.min", "jquery.easing.1.3", "jquery.ba-throttle-debounce", "jquery.fracs-0.11.min", "jquery.nicescroll.min"], function($) {
+		return PanelsAndLayers;
+	});
+}

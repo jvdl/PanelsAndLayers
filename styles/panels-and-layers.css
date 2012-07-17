@@ -49,6 +49,9 @@ html {
 	overflow-x: hidden;
 }
 
+body {
+	font-family: "Century Gothic", "Apple Gothic", Tahoma, Arial, sans-serif;
+}
 #content {
 	width:800px;
 	margin: 0 auto;
