@@ -11,16 +11,18 @@ requirejs.config({
 
 require(["PanelsAndLayers"], function(PanelsAndLayers) {
 
-	var PL, scrollPos = 0;
 
-	PL = new PanelsAndLayers();
+	$(document).ready(function(){
 
-	$(window).on("mousewheel", function(e) {
 
-		$("body").toggleClass("scroll-up", e.originalEvent.wheelDelta >= 0);
+		new PanelsAndLayers({
+			niceScroll: true,
+			throttleTime: 1,
+			scrollAnimationDuration: 1000
+
+		});
 
 	});
-
 
 
 });

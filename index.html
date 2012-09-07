@@ -17,8 +17,8 @@
 				<p>
 					Sometimes you need to create some movement, a sense of
 					parallax between things on the screen. Normally this can be a
-					bit of a painful experience as you try to work out the
-					plugins, code, ratios, blah blah blah.
+					painful experience as you try to work out the plugins, code,
+					ratios, blah blah blah.
 				</p>
 				<p>
 					Panels And Layers attempts to take away the pain and get you
@@ -30,14 +30,14 @@
 		</article><!--/#article-1-->
 
 
-		<article id="article-2" class="panel">
+		<article id="article-2" class="panel" data-background-inertia="-0.2">
 
 			<div id="fruit" class="layer-group">
 				<div class="layer level-1" data-inertia="15" data-min="-100" data-max="800"  id="fruit-apple">      <img src="images/fruit-apple.png" width="376" height="484" alt="fruit-apple" />       </div>
-				<div class="layer level-2" data-inertia="15"   data-min="-100" data-max="800"  id="fruit-cheese">     <img src="images/fruit-cheese.png" width="474" height="466" alt="fruit-cheese" />     </div>
+				<div class="layer level-2" data-inertia="15" data-min="-100" data-max="800"  id="fruit-cheese">     <img src="images/fruit-cheese.png" width="474" height="466" alt="fruit-cheese" />     </div>
 				<div class="layer level-3" data-inertia="2"  data-min="-100" data-max="600"  id="fruit-eggs">       <img src="images/fruit-eggs.png" width="123" height="161" alt="fruit-eggs" />           </div>
 				<div class="layer level-3" data-inertia="10" data-min="-100" data-max="600"  id="fruit-meat">       <img src="images/fruit-meat.png" width="271" height="305" alt="fruit-meat" />           </div>
-				<div class="layer level-4" data-inertia="8"   data-min="-100" data-max="800"  id="fruit-milk">       <img src="images/fruit-milk.png" width="159" height="215" alt="fruit-milk" />           </div>
+				<div class="layer level-4" data-inertia="8"  data-min="-100" data-max="800"  id="fruit-milk">       <img src="images/fruit-milk.png" width="159" height="215" alt="fruit-milk" />           </div>
 				<div class="layer level-5" data-inertia="10" data-min="-100" data-max="1000" id="fruit-orange">     <img src="images/fruit-orange.png" width="230" height="172" alt="fruit-orange" />       </div>
 				<div class="layer level-5" data-inertia="3"  data-min="-100" data-max="600"  id="fruit-pear">       <img src="images/fruit-pear.png" width="139" height="182" alt="fruit-pear" />           </div>
 				<div class="layer level-5" data-inertia="1"  data-min="-100" data-max="600"  id="fruit-strawberry"> <img src="images/fruit-strawberry.png" width="73" height="91" alt="fruit-strawberry" /> </div>
@@ -49,17 +49,16 @@
 
 		<div style="height:1000px;"></div>
 
-		<article id="article-3" class="panel">
+		<article id="beach-scene" class="panel" data-pin="500">
 
 			<div class="layer-group">
 				<div class="layer level-5" data-inertia="-12" data-min="-200" data-max="800" data-axis="vertical"   id="scene-sun">    <img src="images/sun.png" width="372" height="372" alt="sun" />            </div>
-				<div class="layer level-2" data-inertia="-8"  data-min="400" data-max="800" data-axis="vertical"   id="scene-surf">   <img src="images/surfboard.png" width="55" height="202" alt="surfboard" /> </div>
-				<div class="layer level-2 flip" data-inertia="-2" data-min="-100" data-max="800" data-axis="horizontal" id="scene-bike">   <img src="images/bike.png" width="74" height="90" alt="bike" />            </div>
-				<div class="layer level-3" data-inertia="3"  data-min="-100" data-max="800" data-axis="horizontal" id="scene-tree-1"> <img src="images/tree-1.png" width="300" height="421" alt="tree-1" />      </div>
-				<div class="layer level-4" data-inertia="5"  data-min="-100" data-max="800" data-axis="horizontal" id="scene-tree-2"> <img src="images/tree-2.png" width="120" height="260" alt="tree-2" />      </div>
-				<div class="layer level-2" data-inertia="2"  data-min="-100" data-max="800" data-axis="horizontal" id="scene-tree-3"> <img src="images/tree-3.png" width="150" height="215" alt="tree-3" />      </div>
+				<div class="layer level-2" data-inertia="-40"  data-min="510" data-max="800"  id="scene-surf">   <img src="images/surfboard.png" width="55" height="202" alt="surfboard" /> </div>
+				<div class="layer level-2 flip" data-inertia="-2" data-min="-130" data-max="530" data-axis="horizontal" id="scene-bike">   <img src="images/bike.png" width="74" height="90" alt="bike" />            </div>
+				<div class="layer level-4" data-inertia="-0.7"  data-min="-100" data-max="800" data-axis="horizontal" id="scene-tree-2"> <img src="images/tree-2.png" width="120" height="260" alt="tree-2" />      </div>
+				<div class="layer level-4" data-inertia="-0.7"  data-min="-400" data-max="400" data-axis="horizontal" id="scene-beach"> <img src="images/beach.png" width="1500" height="387" alt="" />      </div>
 				<div class="layer level-1 flip" data-inertia="-12" data-min="-1000" data-max="800" data-axis="horizontal" id="scene-bird">   <img src="images/bird.png" width="227" height="66" alt="bird" />           </div>
-				<div class="layer level-1" data-inertia="10" data-min="-500" data-max="800" data-axis="horizontal" id="scene-tree-4"> <img src="images/tree-4.png" width="550" height="750" alt="tree-4" />      </div>
+				<div class="layer level-1" data-inertia="6" data-min="-500" data-max="800" data-axis="horizontal" id="scene-tree-4"> <img src="images/tree-4.png" width="550" height="750" alt="tree-4" />      </div>
 			</div>
 
 		</article>

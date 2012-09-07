@@ -36,23 +36,34 @@
 
 */
 
-function PanelsAndLayers() {
+function PanelsAndLayers( options ) {
 
 	var _super = this,
 		self = this;
 
-	this.$window = $(window);
+	this.$window = $(window); //cache a shortcut to the window
+	this.$body = $("body"); //cache a shortcut to the body
 
+	/** Main config */
 	this.config = {
 		layersLocked: false,
 		selectors: {
 			panel: ".panel",
 			layer: ".layer[data-inertia]"
 		},
+		monitorScrollDirection: true, //adds a 'scroll-up' class to the body when scrolling changes
 		throttleTime: 50,
 		scrollAnimationDuration: 800,
-		scrollEasing: "easeOutExpo"
+		scrollEasing: "easeOutExpo",
+		background: {
+			animate: false,
+			inertia: 0.2
+		}
+
 	};
+
+	//merge our options with default options
+	$.extend(this.config, this.config, options);
 
 	this.panels = [];
 
@@ -69,7 +80,11 @@ function PanelsAndLayers() {
 
 		this.$window.bind('scroll', $.throttle(_super.config.throttleTime, false, function(){ //throttle this to help performance a tiny bit
 			self.animate(); //move the layers!
+
+			self.$body.toggleClass("scroll-up", self.config.monitorScrollDirection && self.config.lastPos > self.$window.scrollTop());
+			self.config.lastPos = self.$window.scrollTop();
 		}));
+
 
 	};
 
@@ -90,7 +105,7 @@ function PanelsAndLayers() {
 	 *
 	 */
 	function Layer(parent, $layer) {
-		var that = this;
+		var self = this;
 
 		this.layer = parent.container.find( $layer );
 
@@ -145,7 +160,12 @@ function PanelsAndLayers() {
 			this.updatePosition( newPosition + "px");
 		};
 
-		return this; // for chaining
+		if (this instanceof Layer) {
+			return this;
+		}
+		else {
+			return new Layer(parent, $layer);
+		}
 	}
 
 
@@ -158,7 +178,7 @@ function PanelsAndLayers() {
 	 *      inertia {Number} a fraction (0.x) to specify the inertia
 	 */
 	function Panel(selector, config) {
-		var that = this;
+		var self = this;
 
 		this.windowHeight = _super.$window.height();
 
@@ -166,7 +186,7 @@ function PanelsAndLayers() {
 
 		this.panel_id	= this.container.attr("id");
 
-		this.inertia	= (0 || config.inertia);
+		this.inertia	= 0 || config.inertia;
 
 
 		//set up the layers
@@ -188,7 +208,7 @@ function PanelsAndLayers() {
 				newYpos = ( -(panelAdjustment) +offSetAdjustment ) * this.inertia,
 				newPosition = "50% " + (newYpos -100) + "px";
 
-			//this.container.css({'backgroundPosition': newPosition});
+			this.container.css({'backgroundPosition': newPosition});
 			return true;
 		};
 
@@ -197,11 +217,24 @@ function PanelsAndLayers() {
 				return;
 			}
 
-			//this.moveBackground();
+			if (config.background.animate === true) {
+				this.moveBackground();
+			}
+
+
 			//move all the layers
 			$.each(this.layers, function(k,v) {
-				that.layers[k].moveLayer();
+				self.layers[k].moveLayer();
 			});
+
+			//if (self.container.data("pin") !== null) {
+			//	var adjuster = _super.$window.scrollTop() - this.container.position().top ;
+			//	//var offSetAdjustment = (this.windowHeight - adjuster	) + this.container.position().top,
+			//	//	panelAdjustment  = (this.windowHeight + _super.$window.scrollTop()) - adjuster;
+			//
+			//	this.container.css({marginTop: Math.max(self.container.data("sticky-for"), adjuster) + "px"});
+			//}
+
 
 		};
 
@@ -218,19 +251,28 @@ function PanelsAndLayers() {
 		 *	Could also potentially use this to implement some comprehensive tracking
 		 */
 		this.init = function() {
+
+			this.inertia = parseFloat(this.container.data("background-inertia"));
+
 			this.container.fracs(function(fracs) {
 				if (fracs.possible > 0.01) {
-					that.container.addClass("inview");
+					self.container.addClass("inview");
 				}
 				if (fracs.possible === 0) {
-					that.container.removeClass("inview");
+					self.container.removeClass("inview");
 				}
 
 			});
 
 		};
 
-		this.init();
+		if (this instanceof Panel) {
+			this.init();
+			return this;
+		}
+		else {
+			return new Panel(selector, config);
+		}
 
 	}
 
@@ -244,11 +286,15 @@ function PanelsAndLayers() {
 
 	this.init = function() {
 
+		if ( this.config.niceScroll === true ) {
+			$("html").niceScroll();
+		}
+
 		//init the panels
 		$( this.config.selectors.panel ).each(function(panelKey,panelEl){
 
 			var $panel = $(panelEl),
-				p = new self.Panel("#"+$panel.attr("id"), {inertia:-0.8}),
+				p = new self.Panel("#"+$panel.attr("id"), self.config),
 				layerIndex = 0;
 
 			//find all layers within a panel and assign a unique class

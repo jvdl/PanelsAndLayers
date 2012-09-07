@@ -53,8 +53,10 @@ body {
 	font-family: "Century Gothic", "Apple Gothic", Tahoma, Arial, sans-serif;
 }
 #content {
-	width:800px;
+	width:1000px;
 	margin: 0 auto;
+	overflow-x: hidden;
+	box-shadow: 0 0 20px #000;
 }
 
 .scroll-up .flip img {
@@ -68,7 +70,7 @@ body {
 
 
 article.panel, footer.panel{
-	padding:50px 0;
+	padding:50px;
 }
 
 #fruit-apple      { top:-100px; left:-100px; }
@@ -81,14 +83,21 @@ article.panel, footer.panel{
 #fruit-strawberry { top:100px;  left:400px;  }
 
 
+#beach-scene {
+	height: 500px;
+	overflow: hidden;
+	background: url(../images/sky.jpg) 0 0 no-repeat #2986e3;
+}
+
 #scene-sun    { top:200px; left:10px; }
-#scene-surf   { top:200px; left:10px; }
-#scene-bike   { top:280px; left:600px; }
+#scene-surf   { top:800px; left:10px; }
+#scene-bike   { top:245px; left:300px; }
 #scene-bird   { top:300px; left:10px; }
+#scene-beach  { top:315px; left:-100px; }
 #scene-tree-1 { top:50px; left:500px; }
 #scene-tree-2 { top:100px; left:100px; }
 #scene-tree-3 { top:0px; left:500px; }
-#scene-tree-4 { top:-200px; left:10px; }
+#scene-tree-4 { top:000px; left:10px; }
 
 afooter#footer-links a {
 	font-size: 30px;
