@@ -37,6 +37,7 @@
 */
 
 function PanelsAndLayers( options ) {
+	"use strict";
 
 	var _super = this,
 		self = this;
@@ -52,7 +53,7 @@ function PanelsAndLayers( options ) {
 			layer: ".layer[data-inertia]"
 		},
 		monitorScrollDirection: true, //adds a 'scroll-up' class to the body when scrolling changes
-		throttleTime: 50,
+		throttle: 50, //throttling can in some cases improve performance
 		scrollAnimationDuration: 800,
 		scrollEasing: "easeOutExpo",
 		background: {
@@ -72,18 +73,26 @@ function PanelsAndLayers( options ) {
 	 *
 	 */
 	this.bindEvents = function() {
+		var scrollFn;
 
 		this.$window.resize(function(){
 			self.animate();
-			//$(".panel:last").css({"minHeight": $(this).height()});
 		});
 
-		this.$window.bind('scroll', $.throttle(_super.config.throttleTime, false, function(){ //throttle this to help performance a tiny bit
+
+		scrollFn = function(){
 			self.animate(); //move the layers!
 
 			self.$body.toggleClass("scroll-up", self.config.monitorScrollDirection && self.config.lastPos > self.$window.scrollTop());
 			self.config.lastPos = self.$window.scrollTop();
-		}));
+		};
+
+		if (self.config.throttle !== false) {
+			this.$window.bind('scroll', $.throttle(_super.config.throttle, false, scrollFn));
+		}
+		else {
+			this.$window.bind('scroll', scrollFn);
+		}
 
 
 	};
@@ -105,7 +114,7 @@ function PanelsAndLayers( options ) {
 	 *
 	 */
 	function Layer(parent, $layer) {
-		var self = this;
+		//var self = this;
 
 		this.layer = parent.container.find( $layer );
 
@@ -206,7 +215,7 @@ function PanelsAndLayers( options ) {
 			var offSetAdjustment = (this.windowHeight - adjuster	) + this.container.position().top,
 				panelAdjustment  = (this.windowHeight + _super.$window.scrollTop()) - adjuster,
 				newYpos = ( -(panelAdjustment) +offSetAdjustment ) * this.inertia,
-				newPosition = "50% " + (newYpos -100) + "px";
+				newPosition = "50% " + Math.min(0, (newYpos -100)) + "px";
 
 			this.container.css({'backgroundPosition': newPosition});
 			return true;
@@ -217,7 +226,7 @@ function PanelsAndLayers( options ) {
 				return;
 			}
 
-			if (config.background.animate === true) {
+			if (this.animateBackground === true) {
 				this.moveBackground();
 			}
 
@@ -227,13 +236,7 @@ function PanelsAndLayers( options ) {
 				self.layers[k].moveLayer();
 			});
 
-			//if (self.container.data("pin") !== null) {
-			//	var adjuster = _super.$window.scrollTop() - this.container.position().top ;
-			//	//var offSetAdjustment = (this.windowHeight - adjuster	) + this.container.position().top,
-			//	//	panelAdjustment  = (this.windowHeight + _super.$window.scrollTop()) - adjuster;
-			//
-			//	this.container.css({marginTop: Math.max(self.container.data("sticky-for"), adjuster) + "px"});
-			//}
+
 
 
 		};
@@ -252,7 +255,11 @@ function PanelsAndLayers( options ) {
 		 */
 		this.init = function() {
 
-			this.inertia = parseFloat(this.container.data("background-inertia"));
+			if (this.container.data("animate") === true) {
+				this.animateBackground = true;
+				this.inertia = parseFloat( this.container.data("inertia") );
+				console.log(this.panel_id);
+			}
 
 			this.container.fracs(function(fracs) {
 				if (fracs.possible > 0.01) {
@@ -260,6 +267,11 @@ function PanelsAndLayers( options ) {
 				}
 				if (fracs.possible === 0) {
 					self.container.removeClass("inview");
+				}
+
+				if (fracs.possible > 0.9) {
+					_super.Nav.setActive(self.container.attr("id"));
+
 				}
 
 			});
@@ -279,9 +291,87 @@ function PanelsAndLayers( options ) {
 
 
 
+/** Navigation */
 
-	this.Panel = Panel;
-	this.Layer = Layer;
+	function Navigation( navSelector ) {
+		var self = this;
+
+		this.nav = $( navSelector );
+		this.cssPosition = this.nav.css("position");
+		this.prefix = 'panel_';
+		this.activePanel = '';
+		this.$window = $(window);
+
+		/** Sets a nav item to active */
+		this.setActive = function(theId){
+			var $newActive;
+
+			$(".active", this.nav).removeClass("active");
+
+			$newActive = $("a[href='#"+theId+"']", this.nav);
+
+			$newActive.addClass("active");
+
+			//isChildLevel = !$newActive.closest("ul").is("#nav");
+			//if (isChildLevel === true) {
+			//	//also activate the parent
+			//	$newActive.closest("ul").parent().addClass("active");
+			//}
+
+
+		};
+
+		///** Perform a GA track when someone uses a link to get to a panel */
+		//this.panelTrack = function(theId) {
+		//	if (this.activePanel == theId) {
+		//		//don't track the same page twice.
+		//		return;
+		//	}
+		//	//check if Google Analytics push method is available
+		//	currentPage = theId.replace(this.prefix, "").replace("#",""); //remove the prefix from the panel ID
+		//	this.pageTrack("/"+currentPage);
+		//	this.activePanel = theId;
+		//}
+		//
+		///** pushes a page track to GA */
+		//this.pageTrack = function(thePage) {
+		//	if (_gaq != undefined){
+		//		_gaq.push(['_trackPageview', thePage]);
+		//	}
+		//
+		//}
+
+
+		/** Bind all the nav events up */
+		this.bindEvents = function(){
+			this.nav.localScroll({
+				hash:true,
+				onAfter: function(e) {
+					var theId = $(e).attr("id");
+					self.setActive(theId);
+					//Nav.panelTrack(theId);
+				},
+				duration:1500
+			});
+
+		};
+
+		this.init = function() {
+			this.bindEvents();
+		};
+
+
+		if (this instanceof Navigation) {
+			this.init();
+			return this;
+		}
+		else {
+			return new Navigation(navSelector);
+		}
+
+	}
+
+
 
 
 	this.init = function() {
@@ -290,11 +380,15 @@ function PanelsAndLayers( options ) {
 			$("html").niceScroll();
 		}
 
+		if (this.config.navigation === true) {
+			this.Nav = new Navigation( "nav" );
+		}
+
 		//init the panels
 		$( this.config.selectors.panel ).each(function(panelKey,panelEl){
 
 			var $panel = $(panelEl),
-				p = new self.Panel("#"+$panel.attr("id"), self.config),
+				p = new Panel("#"+$panel.attr("id"), self.config),
 				layerIndex = 0;
 
 			//find all layers within a panel and assign a unique class
@@ -334,12 +428,27 @@ if (typeof requirejs === "function") {
 			"jquery.easing.1.3": ["jquery.min"],
 			"jquery.ba-throttle-debounce": ["jquery.min"],
 			"jquery.fracs-0.11.min": ["jquery.min"],
+			"jquery.scrollTo-1.4.2-min": ["jquery.min"],
+			"jquery.localscroll-1.2.7-min": ["jquery.min"],
 			"jquery.nicescroll.min": ["jquery.min"]
 		}
 	});
 }
+
 if (typeof define === "function") {
-	define("PanelsAndLayers", ["jquery.min", "jquery.easing.1.3", "jquery.ba-throttle-debounce", "jquery.fracs-0.11.min", "jquery.nicescroll.min"], function($) {
-		return PanelsAndLayers;
-	});
+	define(
+		"PanelsAndLayers",
+		[
+			"jquery.min",
+			"jquery.easing.1.3",
+			"jquery.ba-throttle-debounce",
+			"jquery.fracs-0.11.min",
+			"jquery.scrollTo-1.4.2-min",
+			"jquery.localscroll-1.2.7-min",
+			"jquery.nicescroll.min"
+		],
+		function($) {
+			return PanelsAndLayers;
+		}
+	);
 }

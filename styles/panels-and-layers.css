@@ -1,4 +1,6 @@
 
+
+
 /** Panels are our containers for layers */
 
 .panel {
@@ -52,9 +54,33 @@ html {
 body {
 	font-family: "Century Gothic", "Apple Gothic", Tahoma, Arial, sans-serif;
 }
+
+nav {
+	width:1000px;
+	position: fixed;
+	top:0;
+	left:50%;
+	margin-left:-500px;
+	text-align: center;
+	z-index: 100000;
+	background: rgba(0,0,0,0.5);
+}
+
+nav a {
+	display: inline-block;
+	padding:10px 15px;
+	color:#fff;
+}
+
+nav a:hover,
+nav a:focus,
+nav a.active {
+	background: rgba(0,0,0,0.5);
+}
+
 #content {
 	width:1000px;
-	margin: 0 auto;
+	margin: 50px auto;
 	overflow-x: hidden;
 	box-shadow: 0 0 20px #000;
 }
@@ -69,8 +95,16 @@ body {
 }
 
 
-article.panel, footer.panel{
+.panel{
 	padding:50px;
+}
+
+#article-1 {
+	padding-top:150px;
+}
+
+#fruit {
+	margin-bottom: 1000px;
 }
 
 #fruit-apple      { top:-100px; left:-100px; }
@@ -89,15 +123,40 @@ article.panel, footer.panel{
 	background: url(../images/sky.jpg) 0 0 no-repeat #2986e3;
 }
 
-#scene-sun    { top:200px; left:10px; }
-#scene-surf   { top:800px; left:10px; }
+#scene-sun    { top:-100px; left:510px; }
+#scene-surf   { top:500px; left:10px; }
 #scene-bike   { top:245px; left:300px; }
 #scene-bird   { top:300px; left:10px; }
 #scene-beach  { top:315px; left:-100px; }
 #scene-tree-1 { top:50px; left:500px; }
-#scene-tree-2 { top:100px; left:100px; }
+#scene-tree-2 { top:100px; left:30px; }
 #scene-tree-3 { top:0px; left:500px; }
-#scene-tree-4 { top:000px; left:10px; }
+#scene-tree-4 { top:0px; left:150px; }
+
+#kitty-1,
+#kitty-2 {
+	height: 500px;
+	min-height: 0;
+}
+
+
+#kitty-1 h1,
+#kitty-2 h1,
+#kitty-2 h2,
+#kitty-2 h3 {
+	padding:5px;
+	font-size: 30px;
+	display: inline-block;
+	background: rgba(255,255,255,0.4);
+}
+
+#kitty-1 {
+	background: url(../images/1000.jpg) 50% 0 no-repeat fixed transparent;
+}
+
+#kitty-2 {
+	background: url(../images/1001.jpg) 50% 0 no-repeat fixed transparent;
+}
 
 afooter#footer-links a {
 	font-size: 30px;

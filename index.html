@@ -8,11 +8,20 @@
 	<script type="text/javascript" data-main="scripts/main" src="scripts/require.js"></script>
 </head>
 <body>
+	<nav>
+		<a href="#intro">Intro</a>
+		<a href="#fruit">Fruit</a>
+		<a href="#beach-scene">Beach</a>
+		<a href="#kitty-1">Kitty</a>
+		<a href="#kitty-2">More Kitty</a>
+		<a href="#footer-links">Info</a>
+	</nav>
+
 	<section id="content">
 		<h1> Panels And Layers </h1>
-		<article id="article-1" class="panel">
+		<article id="intro" class="panel">
 
-			<div id="intro" class="layer" data-inertia="2">
+			<div class="layer" data-inertia="2">
 				<h1>A JavaScript Framework</h1>
 				<p>
 					Sometimes you need to create some movement, a sense of
@@ -30,11 +39,11 @@
 		</article><!--/#article-1-->
 
 
-		<article id="article-2" class="panel" data-background-inertia="-0.2">
+		<article id="fruit" class="panel" data-background-inertia="-0.2">
 
-			<div id="fruit" class="layer-group">
-				<div class="layer level-1" data-inertia="15" data-min="-100" data-max="800"  id="fruit-apple">      <img src="images/fruit-apple.png" width="376" height="484" alt="fruit-apple" />       </div>
-				<div class="layer level-2" data-inertia="15" data-min="-100" data-max="800"  id="fruit-cheese">     <img src="images/fruit-cheese.png" width="474" height="466" alt="fruit-cheese" />     </div>
+			<div id="fruit-inner" class="layer-group">
+				<div class="layer level-1" data-inertia="15" data-min="-400" data-max="1200"  id="fruit-apple">      <img src="images/fruit-apple.png" width="376" height="484" alt="fruit-apple" />       </div>
+				<div class="layer level-2" data-inertia="15" data-min="-400" data-max="1200"  id="fruit-cheese">     <img src="images/fruit-cheese.png" width="474" height="466" alt="fruit-cheese" />     </div>
 				<div class="layer level-3" data-inertia="2"  data-min="-100" data-max="600"  id="fruit-eggs">       <img src="images/fruit-eggs.png" width="123" height="161" alt="fruit-eggs" />           </div>
 				<div class="layer level-3" data-inertia="10" data-min="-100" data-max="600"  id="fruit-meat">       <img src="images/fruit-meat.png" width="271" height="305" alt="fruit-meat" />           </div>
 				<div class="layer level-4" data-inertia="8"  data-min="-100" data-max="800"  id="fruit-milk">       <img src="images/fruit-milk.png" width="159" height="215" alt="fruit-milk" />           </div>
@@ -43,11 +52,7 @@
 				<div class="layer level-5" data-inertia="1"  data-min="-100" data-max="600"  id="fruit-strawberry"> <img src="images/fruit-strawberry.png" width="73" height="91" alt="fruit-strawberry" /> </div>
 			</div>
 
-
 		</article>
-
-
-		<div style="height:1000px;"></div>
 
 		<article id="beach-scene" class="panel" data-pin="500">
 
@@ -60,6 +65,20 @@
 				<div class="layer level-1 flip" data-inertia="-12" data-min="-1000" data-max="800" data-axis="horizontal" id="scene-bird">   <img src="images/bird.png" width="227" height="66" alt="bird" />           </div>
 				<div class="layer level-1" data-inertia="6" data-min="-500" data-max="800" data-axis="horizontal" id="scene-tree-4"> <img src="images/tree-4.png" width="550" height="750" alt="tree-4" />      </div>
 			</div>
+
+		</article>
+
+		<article id="kitty-1" class="panel" data-inertia="0.6" data-animate="true">
+
+			<h1 class="layer" data-inertia="10" data-min="50" data-max="300">Backgrounds can animate too</h1>
+
+		</article>
+
+		<article id="kitty-2" class="panel" data-inertia="-0.5" data-animate="true">
+
+			<h1 class="layer" data-inertia="-6" data-min="50" data-max="300">They can animate</h1>
+			<h2 class="layer" data-inertia="-8" data-min="50"  data-max="330">as well as</h2>
+			<h3 class="layer" data-inertia="-10" data-min="50" data-max="360">the layers on top of them</h3>
 
 		</article>
 
