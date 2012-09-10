@@ -350,10 +350,8 @@ function PanelsAndLayers( options ) {
 				duration = Math.max( self.config.duration, duration);
 			}
 
-			console.log("Distance to animate:", distance);
 			e.preventDefault();
 
-			console.log("Duration:", duration);
 			$.scrollTo( href, {
 				duration: duration,
 				easing: "easeOutQuint",
