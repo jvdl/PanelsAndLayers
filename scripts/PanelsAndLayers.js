@@ -50,7 +50,7 @@ function PanelsAndLayers( options ) {
 		layersLocked: false,
 		selectors: {
 			panel: ".panel",
-			layer: ".layer[data-inertia]"
+			layer: ".layer[data-inertia]" //no point in selecting layers that do not specify inertia
 		},
 		monitorScrollDirection: true, //adds a 'scroll-up' class to the body when scrolling changes
 		throttle: 50, //throttling can in some cases improve performance
@@ -59,18 +59,24 @@ function PanelsAndLayers( options ) {
 		background: {
 			animate: false,
 			inertia: 0.2
+		},
+		navigation: {
+			duration: 1500,
+			relativeDuration:true,
+			speed: 1, //pixels per ms.
+			maxDuration: 5000
 		}
 
 	};
 
 	//merge our options with default options
-	$.extend(this.config, this.config, options);
+	$.extend(true, this.config, this.config, options);
 
 	this.panels = [];
 
 
-	/** Bind the necessary events to perform animations
-	 *
+	/**
+	 * Bind the necessary events to perform animations
 	 */
 	this.bindEvents = function() {
 		var scrollFn;
@@ -80,6 +86,7 @@ function PanelsAndLayers( options ) {
 		});
 
 
+		//window scroll handler
 		scrollFn = function(){
 			self.animate(); //move the layers!
 
@@ -139,12 +146,11 @@ function PanelsAndLayers( options ) {
 			this.minOffset = Math.round( -(this.cssStart) * this.inertia );
 			this.max = this.layer.data("max") || false;
 			this.min = this.layer.data("min") || false;
-			//console.log(this.layer, this.max);
+
 		};
 
-		/** Move the layer
-		 *
-		 *
+		/**
+		 * Move the layer
 		 */
 		this.moveLayer = function() {
 			var panelPos, newRawPos, newPosition,
@@ -191,17 +197,20 @@ function PanelsAndLayers( options ) {
 
 		this.windowHeight = _super.$window.height();
 
-		this.container	= $(selector);
+		this.container  = $(selector);
 
-		this.panel_id	= this.container.attr("id");
+		this.panel_id   = this.container.attr("id");
 
-		this.inertia	= 0 || config.inertia;
+		this.inertia    = 0 || config.inertia;
+
+		this.layers     = [];
 
 
-		//set up the layers
-		this.layers = [];
-
-		// Add a layer
+		/**
+		 * Add a layer to the stack
+		 * @param {jQuery} $layer The layer
+		 * @returns {Layer}  the last layer that was pushed to the stack
+		 */
 		this.addLayer = function( $layer ) {
 			var layer = new Layer(this, $layer);
 			this.layers.push(layer);
@@ -258,7 +267,6 @@ function PanelsAndLayers( options ) {
 			if (this.container.data("animate") === true) {
 				this.animateBackground = true;
 				this.inertia = parseFloat( this.container.data("inertia") );
-				console.log(this.panel_id);
 			}
 
 			this.container.fracs(function(fracs) {
@@ -291,70 +299,82 @@ function PanelsAndLayers( options ) {
 
 
 
-/** Navigation */
+	/**
+	 * Implement Panel Navigation
+	 *
+	 * @type {Navigation}
+	 * @class Navigation
+	 * @param {String} Selector of navigation parent. This should contain a set of internal links to panels.
+	 */
 
 	function Navigation( navSelector ) {
 		var self = this;
 
 		this.nav = $( navSelector );
-		this.cssPosition = this.nav.css("position");
-		this.prefix = 'panel_';
-		this.activePanel = '';
 		this.$window = $(window);
 
-		/** Sets a nav item to active */
+		this.config = _super.config.navigation;
+
+
+		/**
+		 * Sets a nav item to active
+		 *
+		 * @param {String} theId Id of the panel that is going to be active
+		 */
 		this.setActive = function(theId){
 			var $newActive;
 
 			$(".active", this.nav).removeClass("active");
-
 			$newActive = $("a[href='#"+theId+"']", this.nav);
-
 			$newActive.addClass("active");
 
-			//isChildLevel = !$newActive.closest("ul").is("#nav");
-			//if (isChildLevel === true) {
-			//	//also activate the parent
-			//	$newActive.closest("ul").parent().addClass("active");
-			//}
-
-
 		};
 
-		///** Perform a GA track when someone uses a link to get to a panel */
-		//this.panelTrack = function(theId) {
-		//	if (this.activePanel == theId) {
-		//		//don't track the same page twice.
-		//		return;
-		//	}
-		//	//check if Google Analytics push method is available
-		//	currentPage = theId.replace(this.prefix, "").replace("#",""); //remove the prefix from the panel ID
-		//	this.pageTrack("/"+currentPage);
-		//	this.activePanel = theId;
-		//}
-		//
-		///** pushes a page track to GA */
-		//this.pageTrack = function(thePage) {
-		//	if (_gaq != undefined){
-		//		_gaq.push(['_trackPageview', thePage]);
-		//	}
-		//
-		//}
 
-
-		/** Bind all the nav events up */
+		/**
+		 * Bind all the nav events up
+		 */
 		this.bindEvents = function(){
-			this.nav.localScroll({
-				hash:true,
-				onAfter: function(e) {
-					var theId = $(e).attr("id");
-					self.setActive(theId);
-					//Nav.panelTrack(theId);
-				},
-				duration:1500
-			});
+
+			this.nav.on("click", "a", this.scrollToPanel);
 
 		};
+
+		this.scrollToPanel = function(e) {
+			var $this = $(this),
+				href = $this.attr("href"),
+				distance = self.config.relativeDuration ? self.getDistance( href ) : self.config.duration,
+				duration = Math.round( Math.min(distance, self.config.maxDuration ) / self.config.speed );
+
+			if (self.config.relativeDuration === true) {
+				duration = Math.max( self.config.duration, duration);
+			}
+
+			console.log("Distance to animate:", distance);
+			e.preventDefault();
+
+			console.log("Duration:", duration);
+			$.scrollTo( href, {
+				duration: duration,
+				easing: "easeOutQuint",
+				onAfter: function(e) {
+					self.setActive($(e).attr("id"));
+					window.location.hash = href;
+				}
+			});
+		};
+
+
+		this.getDistance = function( selector ) {
+			var distance,
+				$location = $(selector);
+
+			distance = ($location.position().top - this.$window.scrollTop());
+			distance = distance < 0 ? distance * -1 : distance;
+
+			return Math.round( distance );
+		};
+
 
 		this.init = function() {
 			this.bindEvents();
@@ -380,7 +400,7 @@ function PanelsAndLayers( options ) {
 			$("html").niceScroll();
 		}
 
-		if (this.config.navigation === true) {
+		if (this.config.useNavigation === true) {
 			this.Nav = new Navigation( "nav" );
 		}
 
@@ -419,18 +439,21 @@ function PanelsAndLayers( options ) {
 
 
 }
+
+/** Below section is usefull if we want to use requirejs */
+
 /*global define:true requirejs:true*/
 
 if (typeof requirejs === "function") {
 	//make sure older plugins wait for jQuery
 	requirejs.config({
 		shim: {
-			"jquery.easing.1.3": ["jquery.min"],
-			"jquery.ba-throttle-debounce": ["jquery.min"],
-			"jquery.fracs-0.11.min": ["jquery.min"],
-			"jquery.scrollTo-1.4.2-min": ["jquery.min"],
-			"jquery.localscroll-1.2.7-min": ["jquery.min"],
-			"jquery.nicescroll.min": ["jquery.min"]
+			"lib/jquery.easing.1.3":           ["lib/jquery.min"],
+			"lib/jquery.ba-throttle-debounce": ["lib/jquery.min"],
+			"lib/jquery.fracs-0.11.min":       ["lib/jquery.min"],
+			"lib/jquery.scrollTo-1.4.2-min":   ["lib/jquery.min"],
+			"lib/jquery.localscroll-1.2.7-min":["lib/jquery.min"],
+			"lib/jquery.nicescroll.min":       ["lib/jquery.min"]
 		}
 	});
 }
@@ -439,13 +462,13 @@ if (typeof define === "function") {
 	define(
 		"PanelsAndLayers",
 		[
-			"jquery.min",
-			"jquery.easing.1.3",
-			"jquery.ba-throttle-debounce",
-			"jquery.fracs-0.11.min",
-			"jquery.scrollTo-1.4.2-min",
-			"jquery.localscroll-1.2.7-min",
-			"jquery.nicescroll.min"
+			"lib/jquery.min",
+			"lib/jquery.easing.1.3",
+			"lib/jquery.ba-throttle-debounce",
+			"lib/jquery.fracs-0.11.min",
+			"lib/jquery.scrollTo-1.4.2-min",
+			"lib/jquery.localscroll-1.2.7-min",
+			"lib/jquery.nicescroll.min"
 		],
 		function($) {
 			return PanelsAndLayers;

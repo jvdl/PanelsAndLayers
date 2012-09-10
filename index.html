@@ -5,7 +5,40 @@
 	<title>Panels And Layers demo</title>
 
 	<link rel="stylesheet" type="text/css" href="styles/panels-and-layers.css">
-	<script type="text/javascript" data-main="scripts/main" src="scripts/require.js"></script>
+	<!--
+		If you want to use RequireJS:
+	-->
+		<script type="text/javascript" data-main="scripts/main" src="scripts/lib/require.js"></script>
+
+
+	<!-- Or simply load the JS files -->
+	<!--<script type="text/javascript" src="scripts/lib/jquery.min.js"></script>-->
+	<!--<script type="text/javascript" src="scripts/lib/jquery.easing.1.3.js"></script>-->
+	<!--<script type="text/javascript" src="scripts/lib/jquery.ba-throttle-debounce.js"></script>-->
+	<!--<script type="text/javascript" src="scripts/lib/jquery.fracs-0.11.min.js"></script>-->
+	<!--<script type="text/javascript" src="scripts/lib/jquery.localscroll-1.2.7-min.js"></script>-->
+	<!--<script type="text/javascript" src="scripts/lib/jquery.scrollTo-1.4.2-min.js"></script>-->
+	<!--<script type="text/javascript" src="scripts/lib/jquery.nicescroll.min.js"></script>-->
+	<!--<script type="text/javascript" src="scripts/PanelsAndLayers.js"></script>-->
+	<!---->
+	<!---->
+	<!--<script type="text/javascript">-->
+	<!--	/*global PanelsAndLayers */-->
+	<!--	$(document).ready(function(){-->
+	<!---->
+	<!--		window.PanelsAndLayersDemo = new PanelsAndLayers({-->
+	<!--			useNavigation: true,-->
+	<!--			throttle: false,-->
+	<!--			scrollAnimationDuration: 200,-->
+	<!--			navigation: {-->
+	<!--				speed: 0.5-->
+	<!--			}-->
+	<!---->
+	<!--		});-->
+	<!---->
+	<!--	});-->
+	<!---->
+	<!--</script>-->
 </head>
 <body>
 	<nav>
@@ -42,8 +75,8 @@
 		<article id="fruit" class="panel" data-background-inertia="-0.2">
 
 			<div id="fruit-inner" class="layer-group">
-				<div class="layer level-1" data-inertia="15" data-min="-400" data-max="1200"  id="fruit-apple">      <img src="images/fruit-apple.png" width="376" height="484" alt="fruit-apple" />       </div>
-				<div class="layer level-2" data-inertia="15" data-min="-400" data-max="1200"  id="fruit-cheese">     <img src="images/fruit-cheese.png" width="474" height="466" alt="fruit-cheese" />     </div>
+				<div class="layer level-1" data-inertia="15" data-min="-400" data-max="700"  id="fruit-apple">      <img src="images/fruit-apple.png" width="376" height="484" alt="fruit-apple" />       </div>
+				<div class="layer level-2" data-inertia="15" data-min="-400" data-max="700"  id="fruit-cheese">     <img src="images/fruit-cheese.png" width="474" height="466" alt="fruit-cheese" />     </div>
 				<div class="layer level-3" data-inertia="2"  data-min="-100" data-max="600"  id="fruit-eggs">       <img src="images/fruit-eggs.png" width="123" height="161" alt="fruit-eggs" />           </div>
 				<div class="layer level-3" data-inertia="10" data-min="-100" data-max="600"  id="fruit-meat">       <img src="images/fruit-meat.png" width="271" height="305" alt="fruit-meat" />           </div>
 				<div class="layer level-4" data-inertia="8"  data-min="-100" data-max="800"  id="fruit-milk">       <img src="images/fruit-milk.png" width="159" height="215" alt="fruit-milk" />           </div>
