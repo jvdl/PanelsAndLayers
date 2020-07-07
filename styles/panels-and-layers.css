@@ -4,7 +4,7 @@
 /** Panels are our containers for layers */
 
 .panel {
-	height: 100%;
+	height: calc(100vh - 150px); /* 100px for the padding, 50px for the nav */
 	min-height:650px;
 	position: relative;
 }
@@ -127,7 +127,7 @@ nav a.active {
 #scene-surf   { top:500px; left:10px; }
 #scene-bike   { top:245px; left:300px; }
 #scene-bird   { top:300px; left:10px; }
-#scene-beach  { top:315px; left:-100px; }
+#scene-beach  { top:315px; left:-200px; }
 #scene-tree-1 { top:50px; left:500px; }
 #scene-tree-2 { top:100px; left:30px; }
 #scene-tree-3 { top:0px; left:500px; }
@@ -135,8 +135,8 @@ nav a.active {
 
 #kitty-1,
 #kitty-2 {
-	height: 500px;
-	min-height: 0;
+	min-height: 650px;
+	background-size: contain;
 }
 
 
@@ -151,11 +151,11 @@ nav a.active {
 }
 
 #kitty-1 {
-	background: url(../images/1000.jpg) 50% 0 no-repeat fixed transparent;
+	background: url(../images/1000.jpg) 50% 0 no-repeat fixed #dadcce;
 }
 
 #kitty-2 {
-	background: url(../images/1001.jpg) 50% 0 no-repeat fixed transparent;
+	background: url(../images/1001.jpg) 50% 0 no-repeat fixed #c71f1d;
 }
 
 afooter#footer-links a {

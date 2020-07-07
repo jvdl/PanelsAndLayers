@@ -50,6 +50,7 @@ function PanelsAndLayers( options ) {
 		layersLocked: false,
 		selectors: {
 			panel: ".panel",
+			scrollContainer: window,
 			layer: ".layer[data-inertia]" //no point in selecting layers that do not specify inertia
 		},
 		monitorScrollDirection: true, //adds a 'scroll-up' class to the body when scrolling changes
@@ -80,7 +81,6 @@ function PanelsAndLayers( options ) {
 	 */
 	this.bindEvents = function() {
 		var scrollFn;
-
 		this.$window.resize(function(){
 			self.animate();
 		});
@@ -90,15 +90,15 @@ function PanelsAndLayers( options ) {
 		scrollFn = function(){
 			self.animate(); //move the layers!
 
-			self.$body.toggleClass("scroll-up", self.config.monitorScrollDirection && self.config.lastPos > self.$window.scrollTop());
-			self.config.lastPos = self.$window.scrollTop();
+			self.$body.toggleClass("scroll-up", self.config.monitorScrollDirection && self.config.lastPos > self.$scroller.scrollTop());
+			self.config.lastPos = self.$scroller.scrollTop();
 		};
 
 		if (self.config.throttle !== false) {
-			this.$window.bind('scroll', $.throttle(_super.config.throttle, false, scrollFn));
+			this.$scroller.bind('scroll', $.throttle(_super.config.throttle, false, scrollFn));
 		}
 		else {
-			this.$window.bind('scroll', scrollFn);
+			this.$scroller.bind('scroll', scrollFn);
 		}
 
 
@@ -155,7 +155,7 @@ function PanelsAndLayers( options ) {
 		this.moveLayer = function() {
 			var panelPos, newRawPos, newPosition,
 				panelHeight = parent.container.height(),
-				windowHeight = _super.$window.height();
+				windowHeight = _super.$scroller.height();
 
 
 			//calculate the appropriate panel position.
@@ -277,7 +277,7 @@ function PanelsAndLayers( options ) {
 					self.container.removeClass("inview");
 				}
 
-				if (fracs.possible > 0.9) {
+				if (fracs.possible > 0.9 && _super.config.useNavigation) {
 					_super.Nav.setActive(self.container.attr("id"));
 
 				}
@@ -353,8 +353,9 @@ function PanelsAndLayers( options ) {
 			e.preventDefault();
 
 			$.scrollTo( href, {
-				duration: duration,
-				easing: "easeOutQuint",
+				// this animation seems to be broken so disabling for now.
+				// duration: duration,
+				// easing: "easeOutQuint",
 				onAfter: function(e) {
 					self.setActive($(e).attr("id"));
 					window.location.hash = href;
@@ -393,6 +394,10 @@ function PanelsAndLayers( options ) {
 
 
 	this.init = function() {
+		this.$scroller = this.$window
+		if (this.config.selectors.scrollContainer) {
+			this.$scroller = $(this.config.selectors.scrollContainer);
+		}
 
 		if ( this.config.niceScroll === true ) {
 			$("html").niceScroll();
